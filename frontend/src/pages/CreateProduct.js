@@ -9,19 +9,36 @@ export default function CreateProduct({ api, user }) {
     description: "",
     category: "",
     stock: 0,
+    image: null,
   });
   const navigate = useNavigate();
 
   const submit = async (e) => {
     e.preventDefault();
     if (!user) return alert("Login required to create product");
+
     try {
-      const body = { ...form, seller: user.id };
-      await axios.post(api + "/products", body);
-      alert("Created");
+      // Use FormData for file upload
+      const formData = new FormData();
+      formData.append("title", form.title);
+      formData.append("price", form.price);
+      formData.append("description", form.description);
+      formData.append("category", form.category);
+      formData.append("stock", form.stock);
+      formData.append("seller", user.id); // Add seller ID
+
+      if (form.image) {
+        formData.append("image", form.image);
+      }
+
+      await axios.post(api + "/products", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      alert("Product created successfully");
       navigate("/products");
     } catch (err) {
-      console.log("this ran", err);
+      console.log(err);
       alert(err.response?.data?.error || err.message);
     }
   };
@@ -67,6 +84,12 @@ export default function CreateProduct({ api, user }) {
             setForm({ ...form, stock: parseInt(e.target.value) })
           }
           required
+        />
+        <br />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setForm({ ...form, image: e.target.files[0] })}
         />
         <br />
         <button type="submit">Create</button>
