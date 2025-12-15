@@ -1,18 +1,22 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Signup({ setUser, api }) {
-  const [form, setForm] = useState({ username: "", password: "" });
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
   const [err, setErr] = useState("");
   const navigate = useNavigate();
 
   const submit = async (e) => {
     e.preventDefault();
     setErr("");
+
     try {
-      const res = await axios.post(api + "/auth/signup", form); // change endpoint
+      const res = await axios.post(api + "/auth/register", form);
       setUser(res.data.user);
       localStorage.setItem("user", JSON.stringify(res.data.user));
       navigate("/products");
@@ -25,6 +29,7 @@ export default function Signup({ setUser, api }) {
     <div className="d-flex justify-content-center align-items-center vh-100">
       <div className="card p-4 shadow" style={{ maxWidth: 420, width: "100%" }}>
         <h2 className="text-center mb-4">Sign Up</h2>
+
         <form onSubmit={submit}>
           <div className="mb-3">
             <input
@@ -35,6 +40,18 @@ export default function Signup({ setUser, api }) {
               required
             />
           </div>
+
+          <div className="mb-3">
+            <input
+              className="form-control"
+              placeholder="Email"
+              type="email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              required
+            />
+          </div>
+
           <div className="mb-3">
             <input
               className="form-control"
@@ -45,10 +62,12 @@ export default function Signup({ setUser, api }) {
               required
             />
           </div>
+
           <button className="btn btn-primary w-100" type="submit">
             Sign Up
           </button>
         </form>
+
         <p className="text-center mt-3">
           Already have an account? <Link to="/login">Login</Link>
         </p>

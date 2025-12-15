@@ -15,6 +15,8 @@ import CreateProduct from "./pages/CreateProduct";
 import Cart from "./pages/Cart";
 import ProtectedRoute from "./pages/ProtectedRoute";
 
+const api = `${process.env.REACT_APP_API_URL}/api`;
+
 function Navbar({ user, onLogout }) {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
@@ -92,7 +94,7 @@ function AppRoutes({ user, setUser }) {
               user ? (
                 <Navigate to="/products" replace />
               ) : (
-                <Login setUser={setUser} api="http://localhost:5000/api" />
+                <Login setUser={setUser} api={api} />
               )
             }
           />
@@ -102,7 +104,7 @@ function AppRoutes({ user, setUser }) {
               user ? (
                 <Navigate to="/products" replace />
               ) : (
-                <Signup setUser={setUser} api="http://localhost:5000/api" />
+                <Signup setUser={setUser} api={api} />
               )
             }
           />
@@ -110,7 +112,7 @@ function AppRoutes({ user, setUser }) {
             path="/products"
             element={
               <ProtectedRoute user={user}>
-                <Products api="http://localhost:5000/api" user={user} />
+                <Products api={api} user={user} />
               </ProtectedRoute>
             }
           />
@@ -118,7 +120,7 @@ function AppRoutes({ user, setUser }) {
             path="/create"
             element={
               <ProtectedRoute user={user}>
-                <CreateProduct api="http://localhost:5000/api" user={user} />
+                <CreateProduct api={api} user={user} />
               </ProtectedRoute>
             }
           />
@@ -126,7 +128,7 @@ function AppRoutes({ user, setUser }) {
             path="/cart"
             element={
               <ProtectedRoute user={user}>
-                <Cart api="http://localhost:5000/api" user={user} />
+                <Cart api={api} user={user} />
               </ProtectedRoute>
             }
           />

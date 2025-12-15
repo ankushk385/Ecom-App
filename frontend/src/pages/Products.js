@@ -73,7 +73,7 @@ export default function Products({ api, user }) {
             <div className="card h-100 shadow-sm">
               {p.image ? (
                 <img
-                  src={`http://localhost:5000/uploads/${p.image}`}
+                  src={`${process.env.REACT_APP_API_URL}/uploads/${p.image}`}
                   className="card-img-top"
                   style={{ objectFit: "cover", height: 200 }}
                   alt={p.title}
